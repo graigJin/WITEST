@@ -15,6 +15,10 @@ namespace Controllers
         [SerializeField] private Material emptyMaterial;
         [SerializeField] private Material floorMaterial;
         [SerializeField] private Material selectionMaterial;
+        
+        [SerializeField] private Material lightGrassMaterial;
+        [SerializeField] private Material grassMaterial;
+        [SerializeField] private Material darkGrassMaterial;
 
         public World World { get; private set; }
         private Dictionary<Tile, GameObject> _tileGameObjectsDictionary;
@@ -122,8 +126,14 @@ namespace Controllers
             
             switch (tile.Type)
             {
-                case Tile.TileType.Floor:
-                    go.GetComponent<SpriteRenderer>().material = floorMaterial;
+                case Tile.TileType.LightGrass:
+                    go.GetComponent<SpriteRenderer>().material = lightGrassMaterial;
+                    break;
+                case Tile.TileType.Grass:
+                    go.GetComponent<SpriteRenderer>().material = grassMaterial;
+                    break;
+                case Tile.TileType.DarkGrass:
+                    go.GetComponent<SpriteRenderer>().material = darkGrassMaterial;
                     break;
                 default:
                     go.GetComponent<SpriteRenderer>().material = emptyMaterial;
@@ -137,8 +147,12 @@ namespace Controllers
         {
             switch (tile.Type)
             {
-                case Tile.TileType.Floor:
-                    return floorMaterial;
+                case Tile.TileType.LightGrass:
+                    return lightGrassMaterial;
+                case Tile.TileType.Grass:
+                    return grassMaterial;
+                case Tile.TileType.DarkGrass:
+                    return darkGrassMaterial;
                 default:
                     return emptyMaterial;
             }

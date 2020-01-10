@@ -8,7 +8,7 @@ namespace Models
     {
         public enum TileType
         {
-            Empty, Floor
+            LightGrass, Grass, DarkGrass, Empty
         }
 
         public int XPos { get; }
@@ -36,13 +36,16 @@ namespace Models
 
         public void RandomizeTileType()
         {
-            switch (Random.Range(0, 2))
+            switch (Random.Range(0, 3))
             {
                 case 0:
-                    Type = TileType.Empty;
+                    Type = TileType.LightGrass;
                     break;
                 case 1:
-                    Type = TileType.Floor;
+                    Type = TileType.Grass;
+                    break;
+                case 2:
+                    Type = TileType.DarkGrass;
                     break;
                 default:
                     Type = TileType.Empty;
@@ -54,19 +57,7 @@ namespace Models
         {
             _cbTileTypeChange += callback;
         }
-
-        public void ChangeTileType()
-        {
-            if (Type == TileType.Empty)
-            {
-                Type = TileType.Floor;
-            }
-            else
-            {
-                Type = TileType.Empty;
-            }
-        }
-
+        
         public String GetName()
         {
             return XPos + "|" + YPos + "|" + Type;
