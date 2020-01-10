@@ -8,7 +8,7 @@ namespace Models
     {
         public enum TileType
         {
-            LightGrass, Grass, DarkGrass, Empty
+            LightGrass, Grass, DarkGrass, LightSand, Sand, DarkSand, Empty
         }
 
         public int XPos { get; }
@@ -36,21 +36,39 @@ namespace Models
 
         public void RandomizeTileType()
         {
-            switch (Random.Range(0, 3))
+            int r = Random.Range(0, 100);
+
+            if (r < 25)
             {
-                case 0:
-                    Type = TileType.LightGrass;
-                    break;
-                case 1:
-                    Type = TileType.Grass;
-                    break;
-                case 2:
-                    Type = TileType.DarkGrass;
-                    break;
-                default:
-                    Type = TileType.Empty;
-                    break;
+                Type = TileType.LightGrass;
+                return;
             }
+            
+            if (r < 50)
+            {
+                Type = TileType.Grass;
+                return;
+            }
+            
+            if (r < 75)
+            {
+                Type = TileType.DarkGrass;
+                return;
+            }
+            
+            if (r < 85)
+            {
+                Type = TileType.LightSand;
+                return;
+            }
+            
+            if (r < 95)
+            {
+                Type = TileType.Sand;
+                return;
+            }
+
+            Type = TileType.DarkSand;
         }
 
         public void RegisterTileTypeChangeCallback(Action<Tile> callback)

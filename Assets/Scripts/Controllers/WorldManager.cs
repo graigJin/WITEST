@@ -19,9 +19,14 @@ namespace Controllers
         [SerializeField] private Material lightGrassMaterial;
         [SerializeField] private Material grassMaterial;
         [SerializeField] private Material darkGrassMaterial;
+        
+        [SerializeField] private Material lightSandMaterial;
+        [SerializeField] private Material SandMaterial;
+        [SerializeField] private Material darkSandMaterial;
 
         public World World { get; private set; }
         private Dictionary<Tile, GameObject> _tileGameObjectsDictionary;
+        private Dictionary<Tile.TileType, Material> _tileTypeMaterialDictionary;
 
         private Tile _currentSelection;
         private Material _currentMaterial;
@@ -34,8 +39,23 @@ namespace Controllers
             _ui = GameObject.FindWithTag("UI").GetComponent<UIController>();
             
             _tileGameObjectsDictionary = new Dictionary<Tile, GameObject>();
+            SetUpTileTypeDictionary();
+            
             World = new World(width, height);
             GenerateTileGameObjects();
+        }
+
+        void SetUpTileTypeDictionary()
+        {
+            _tileTypeMaterialDictionary = new Dictionary<Tile.TileType, Material>();
+            
+            _tileTypeMaterialDictionary.Add(Tile.TileType.Empty, emptyMaterial);
+            _tileTypeMaterialDictionary.Add(Tile.TileType.Grass, grassMaterial);
+            _tileTypeMaterialDictionary.Add(Tile.TileType.LightGrass, lightGrassMaterial);
+            _tileTypeMaterialDictionary.Add(Tile.TileType.DarkGrass, darkGrassMaterial);
+            _tileTypeMaterialDictionary.Add(Tile.TileType.LightSand, lightSandMaterial);
+            _tileTypeMaterialDictionary.Add(Tile.TileType.Sand, SandMaterial);
+            _tileTypeMaterialDictionary.Add(Tile.TileType.DarkSand, darkSandMaterial);
         }
 
         void GenerateTileGameObjects()
@@ -123,39 +143,13 @@ namespace Controllers
         void OnTileTypeChanged(Tile tile)
         {
             GameObject go = _tileGameObjectsDictionary[tile];
-            
-            switch (tile.Type)
-            {
-                case Tile.TileType.LightGrass:
-                    go.GetComponent<SpriteRenderer>().material = lightGrassMaterial;
-                    break;
-                case Tile.TileType.Grass:
-                    go.GetComponent<SpriteRenderer>().material = grassMaterial;
-                    break;
-                case Tile.TileType.DarkGrass:
-                    go.GetComponent<SpriteRenderer>().material = darkGrassMaterial;
-                    break;
-                default:
-                    go.GetComponent<SpriteRenderer>().material = emptyMaterial;
-                    break;
-            }
-
+            go.GetComponent<SpriteRenderer>().material = _tileTypeMaterialDictionary[tile.Type];
             go.name = tile.GetName();
         }
 
         Material GetMaterial(Tile tile)
         {
-            switch (tile.Type)
-            {
-                case Tile.TileType.LightGrass:
-                    return lightGrassMaterial;
-                case Tile.TileType.Grass:
-                    return grassMaterial;
-                case Tile.TileType.DarkGrass:
-                    return darkGrassMaterial;
-                default:
-                    return emptyMaterial;
-            }
+            return _tileTypeMaterialDictionary[tile.Type];
         }
 
     }
